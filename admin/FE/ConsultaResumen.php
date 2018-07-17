@@ -110,6 +110,9 @@
 			         		//print_r($resquest);
 			         		$ArrayMessage=array('success'=> array('ReferenceID' => $res['ID_DOCUMENTO_ENVIADO'],'codRespuesta' =>$res['CODIGO'],
 								'Description' => $res['DESCRIPCION'],'nombre_archivo'=>"" ),'errors'=>0);
+			         		
+							
+		
 							
 			         	}else{
 
@@ -118,19 +121,22 @@
 							//echo json_encode($ArrayMessage);
 
 			         	}
-			            
+			         	$db = new conexion();
+						$link = $db->conexion();
+							
+			            $link->query("UPDATE alquilerhabitacion SET mensaje_respuesta='".$res['DESCRIPCION']."' WHERE ticket ='".$res['CODIGO']."'");
 						
 						
 					else:
-						$error=json_encode(array('success'=>0,'errors'=>array('getMessage' =>'ERROR SUNAT' ,'getCode'=>0)));
-	                	 throw new \Exception($error);
+						$ArrayMessage=json_encode(array('success'=>0,'errors'=>array('getMessage' =>'ERROR SUNAT' ,'getCode'=>0)));
+	                	 throw new \Exception($ArrayMessage);
 					endif;
 					
 
 					
 					
 				 } catch(TimeoutException $e) {
-	            	$error=json_encode(array('success'=>0,'errors'=>array('getMessage' =>'ERROR SUNAT' ,'getCode'=>0)));
+	            	$ArrayMessage=json_encode(array('success'=>0,'errors'=>array('getMessage' =>'ERROR SUNAT' ,'getCode'=>0)));
 	                echo json_encode($ArrayMessage);
 	            
 	            } catch (Exception $e) {

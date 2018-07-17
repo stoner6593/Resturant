@@ -18,13 +18,21 @@ $sqlalquiler = $mysqli->query("select
 	huesped.nombre,
 	
 	alquilerhabitacion.comentarios,
-	alquilerhabitacion.nroorden
+	alquilerhabitacion.nroorden,
+	alquilerhabitacion.totalefectivo,
+	alquilerhabitacion.totalvisa
 	
 	from alquilerhabitacion inner join huesped on huesped.idhuesped = alquilerhabitacion.idhuesped
 	where alquilerhabitacion.idalquiler = '$xidalquiler' 
 	");
 	
 	$xaFila = $sqlalquiler->fetch_row();
+
+	if($xaFila[10] > 0){
+		$formapago="Efectivo";
+	}elseif ($xaFila[11] > 0) {
+		$formapago="Visa";
+	}
 
 //Detalle Aquiler
 $sqldetalle = $mysqli->query("select
@@ -189,6 +197,9 @@ $sqlventa = $mysqli->query("select
     </tr>
     <tr>
       <td height="20"><span class="textoContenido">------------------------------------------------</span></td>
+    </tr>
+     <tr>
+      <td height="20"><span class="textoContenido"><strong>Forma de Pago:</strong>  <?php echo $formapago;?></span></td>
     </tr>
     <tr>
       <td height="20">&nbsp;</td>

@@ -24,6 +24,17 @@ $consultahabitacion = "update habitacion set
 	idalquiler = 0,
 	idestado = 1
 	where idhabitacion = '$xidhabitacion'";
+
+//Actualiza Ingreso
+$consultahabitacion = "update ingresosturno set
+	estadoturno = 0,
+	totalhabitacion = 0,
+	totaladicional=0,
+	totalproducto=0,
+	totalefectivo=0,
+	totalvisa=0
+	where idhabitacion = '$xidhabitacion'";
+
 if($mysqli->query($consultahabitacion)){}
 
 $mysqli->close();	

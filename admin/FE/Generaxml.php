@@ -76,7 +76,9 @@
 			
 			alquilerhabitacion.comentarios,
 			alquilerhabitacion.nroorden,
-			alquilerhabitacion.fecharegistro
+			alquilerhabitacion.fecharegistro,
+			alquilerhabitacion.totalefectivo,
+			alquilerhabitacion.totalvisa
 			
 			from alquilerhabitacion inner join huesped on huesped.idhuesped = alquilerhabitacion.idhuesped
 			where alquilerhabitacion.idalquiler = '$this->idalquiler' 
@@ -318,6 +320,13 @@
 	        $dato['Moneda']='PEN'; 
 	        $dato['tipo_documento']=trim($correlativo[1]); 
 	        $dato['fecharegistro']=$date->format('Y-m-d');
+
+	        if($xaFila['14'] > 0){ 
+	        	$dato['formapago']="Efectivo";
+	        }elseif ($xaFila['15'] > 0) {
+	        	$dato['formapago']="Visa";
+	        }
+	        
 
 			$arrayFirmado=array('NomDocXML'=>$this->getId(),
 				'TipoDocumento'=>$this->InvoiceTypeCode,
@@ -643,7 +652,7 @@
 					$codigoRespuesta=$res['success']['codRespuesta'];
 					$msgRespuesta=$res['success']['Description'];
 					foreach ($datos as $key) {
-						$this->ActualizaResumenDocumentos($key['id']);
+						$this->ActualizaResumenDocumentos($key['id'],$codigoRespuesta);
 					}
 					
 																	
@@ -687,10 +696,10 @@
 				values($numeracion[0],'$numeracion[4]','$codigoRespuesta','$msgRespuesta','$nombreZip','$nombre_archivo','$corre',NOW())");
 		}
 		//Actualizar documentos enviados por resumen
-		function ActualizaResumenDocumentos($id){
+		function ActualizaResumenDocumentos($id,$codigoRespuesta=""){
 			$db = new conexion();
 			$link = $db->conexion();
-			return $link->query("UPDATE alquilerhabitacion SET enviado ='2',mensaje_respuesta='Documento enviado por resumen diario'WHERE idalquiler ='$id'");
+			return $link->query("UPDATE alquilerhabitacion SET enviado ='2',mensaje_respuesta='Documento enviado por resumen diario',ticket='$codigoRespuesta' WHERE idalquiler ='$id'");
 		}
 		//Eniar a SUNAT
 		function enviar_sunat($zipEnviar,$nombreZip,$nombre_archivo){
@@ -702,7 +711,6 @@
 			$params=array('user'=>'20545756022MODDATOS',
 				'pass'=>'moddatos');
 
-			
 		
 			try {
 
@@ -1186,7 +1194,9 @@
 			$alto=$pdf->GetY();
 			$pdf->SetX(20);
 			$pdf->Cell(2,5,$pdf->write2DBarcode($datosAdicionales_CDB, 'PDF417', 10, $alto, 135, 20, $style, 'N'),0,'J');
-			
+			$pdf->Ln();
+			$pdf->SetX(26);
+			$pdf->Cell(2,5,'Forma de Pago: '.$Datos['formapago'],0,'J');
 			//$pdf->Line(10,10,200,10);
 			
 			//$nombre_archivo='prueba.pdf';

@@ -198,7 +198,7 @@ $sqlhabitaciontipo = $mysqli->query("select
 	
 	/*LEER SERIES*/
 
-	$serie=$mysqli->query("SELECT * FROM series WHERE estado=1");
+	$serie=$mysqli->query("SELECT * FROM series WHERE estado=1 and iddocumento in(1,2)");
 	
 //Consumos *****
 $sqlventa = $mysqli->query("select
