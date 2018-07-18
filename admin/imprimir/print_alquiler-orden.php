@@ -168,14 +168,14 @@ $sqlventa = $mysqli->query("select
       <td height="20">&nbsp;</td>
     </tr>
     <?php $nroventa = $sqlventa->num_rows; if($nroventa!=""){ ?>
-    <tr>
+    <tr style="display: none;">
       <td height="20"><strong><span class="textoContenido">CONSUMO</span></strong></td>
     </tr>
-    <tr>
+    <tr style="display: none;">
       <td height="20"><span class="textoContenido">------------------------------------------------</span></td>
     </tr>
     <?php $xprodtotal = 0; $num = 0; while($vFila = $sqlventa->fetch_row()){?>
-    <tr>
+    <tr style="display: none;">
       <td height="20"><span class="textoContenido">
       (<?php echo $vFila['5']; ?>) <?php echo $vFila['4']; ?> - S/ <?php echo $vFila['7']; ?></span>
       </td>
@@ -188,7 +188,7 @@ $sqlventa = $mysqli->query("select
     <tr>
       <td height="20">&nbsp;</td>
     </tr>
-    <tr>
+    <tr style="display: none;">
       <td height="20"><span class="textoContenido">------------------------------------------------</span></td>
     </tr>
     <tr>

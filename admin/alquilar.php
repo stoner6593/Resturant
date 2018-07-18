@@ -705,8 +705,8 @@ $consulta=$mysqli->query("insert alquilerhabitacion_detalle_tmp(
 							} 
 						?>
                           </table>
-                          <input name="txtnumeroproducto" type="text" id="txtnumeroproducto" value="<?php echo $num;?>">
-                          <input name="txtcostototalproducto" type="text" id="txtcostototalproducto" value="<?php echo $xprodtotal;?>"></td>
+                          <input name="txtnumeroproducto" type="hidden" id="txtnumeroproducto" value="<?php echo $num;?>">
+                          <input name="txtcostototalproducto" type="hidden" id="txtcostototalproducto" value="<?php echo $xprodtotal;?>"></td>
                         </tr>
                         <tr>
                           <td height="72"><table width="100%" border="0" cellspacing="1" cellpadding="1">
