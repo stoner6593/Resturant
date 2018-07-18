@@ -22,7 +22,8 @@ $sqlalquiler = $mysqli->query("select
 	
 	alquilerhabitacion.comentarios,
 	alquilerhabitacion.nroorden,
-	alquilerhabitacion.codigo_respuesta
+	alquilerhabitacion.codigo_respuesta,
+	alquilerhabitacion.descuento
 	
 	from alquilerhabitacion inner join huesped on huesped.idhuesped = alquilerhabitacion.idhuesped
 	where alquilerhabitacion.idalquiler = '$xidalquiler' 
@@ -266,6 +267,11 @@ $sqlventa = $mysqli->query("select
 	function PersonasAdicionales(){ 
         window.open("persona-adicional.php?idhabitacion=<?php echo $xidhabitacion.'&idalquiler='.$xidalquiler.'&nombrecliente='.$xaFila['7'].'&idcliente='.$xaFila['6'];?>","modelo","width=1000, height=350, scrollbars=yes" );
     }
+
+      function abrirCliente(){
+        window.open('buscar-cliente2.php?idalquiler='+ <?php echo $xidalquiler; ?>,'modelo','width=800, height=300, scrollbars=yes, location=no, directories=no,resizable=no, top=200,left=300', 'socialPopupWindow');
+    } 
+
 	<?php 
 		$xtipoalq = $xaFila['4'];
 		if($xtipoalq==1){
@@ -312,7 +318,7 @@ function PendientedePago(){
       <td width="793" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
        
           <tr>
-            <td width="460" height="30"> <h3 style="color:#E1583E;"> <i class="fa fa-users"></i> Habitación Alquilada (Detalle)</h3></td>
+            <td width="460" height="30"> <h3 style="color:#E1583E;"> <i class="fa fa-users"></i> Mesa Ocupada (Detalle)</h3></td>
             <td width="203"><span class="textoContenido"><strong>ORDEN #: <?php echo $xaFila['9'];?><span class="textoContenido" style="font-size:28px;color:#E1583E;">
               <input name="txtidalquiler" type="hidden" id="txtidalquiler" value="<?php echo $xidalquiler;?>">
             </span></strong></span></td>
@@ -338,8 +344,13 @@ function PendientedePago(){
                     <form name="form_adicional" id="form_adicional" action="include/alquiler/prg_cobrar-adicionales.php?formapago=efectivo&idalquiler=<?php echo $xidalquiler.'&idhabitacion='.$xidhabitacion.'&idalquilerdetalle='.$tmpFila['0'];?>" method="post">
                     <table width="95%" border="0" cellpadding="1" cellspacing="1">
                         <tr>
-                          <td width="315" height="25" align="left" valign="middle"> <h3> <?php echo $xaFila['7'];?> </h3>  <a href="#" onClick="PersonasAdicionales();" class="btnnegro"> Personas Adicionales </a> </td>
-                          <td width="266" height="25" align="left" valign="middle"><span class="textoContenido"><strong>Hab. <?php echo $xtipohabitacion;?> #: </strong></span> <span class="textoContenido" style="font-size:28px;color:#E1583E;"><?php echo $xaFila['3'];?>
+                          <td width="315" height="25" align="left" valign="middle"><p> <h3> <?php echo $xaFila['7'];?> </h3> 
+                          	 <button type="button" onclick="abrirCliente(); return false" class="btnmodificar tooltip" tooltip="Cambiar Cliente" style="border:0px; cursor:pointer;"> <i class="fa fa-search-plus"></i></button>
+
+                          	 <button type="button" onclick="window.location.href='huespedes-editor.php?xdesdealquiler=1&<?php echo 'idhabitacion='.$xidhabitacion.'&nrohabitacion='.$xnrohabitacion.'&xestado='.$xestadohabitacion.'&idtipohab='.$idtipohab;?>';" class="btnmodificar tooltip" tooltip="Agregar Cliente" style="border:0px; cursor:pointer;"> <i class="fa fa-plus-square"></i></button>       
+                          	 </p>
+                          <a href="#" onClick="PersonasAdicionales();" class="btnnegro" style="display:none"> Personas Adicionales </a> </td>
+                          <td width="266" height="25" align="left" valign="middle"><span class="textoContenido"><strong>Mesa <?php //echo $xtipohabitacion;?> #: </strong></span> <span class="textoContenido" style="font-size:28px;color:#E1583E;"><?php echo $xaFila['3'];?>
                               <input name="txtidhabitacion" type="hidden" id="txtidhabitacion" value="<?php echo $xidhabitacion;?>">
                               <span class="textoContenido" style="font-size:28px;color:#00A230;">
                               <input name="txtnrohabitacion" type="hidden" id="txtnrohabitacion" value="<?php echo $xnrohabitacion;?>">
@@ -349,7 +360,7 @@ function PendientedePago(){
                         <tr>
                           <td height="25" colspan="3" valign="top"><div class="lineahorizontal" style="background:#BFBFBF;"></div></td>
                         </tr>
-                        <tr>
+                        <tr style="display:none">
                           <td height="30" colspan="3" valign="top"><table width="100%" border="0" cellspacing="1" cellpadding="1">
                             <tr class="textoContenido">
                               <td width="6%" height="25" align="center">#</td>
@@ -370,9 +381,9 @@ function PendientedePago(){
                                 <?php 
 								
 								if($tmpFila['12']==1){ //Estado Pago
-									$xprecioalquiler = $xprecioalquiler + $tmpFila['20'];
+									$xprecioalquiler = ($xprecioalquiler + $tmpFila['20']) /*- $xaFila[11]*/;
 								}elseif($tmpFila['12']==0){
-									$precioalquilerpendiente = $precioalquilerpendiente + $tmpFila['20'];
+									$precioalquilerpendiente = ($precioalquilerpendiente + $tmpFila['20']) /*-  $xaFila[11]*/;
 								}
 								echo tipoAlquiler($tmpFila['2']).' ('.$tmpFila['19'].')';
 								if($tmpFila['2'] != 4 &&  $tmpFila['2'] != 5){
@@ -444,14 +455,14 @@ function PendientedePago(){
                           </form>
                       </td>
                         </tr>
-                        <tr>
+                        <tr style="display:none">
                           <td height="52" colspan="3" valign="bottom">
                           <a href="#" id="mostrar" class="btnmodificar"> <i class="fa fa-chevron-down"></i> </a>  
                           <a href="#" id="ocultar" class="btnmodificar"> <i class="fa fa-chevron-up"></i> </a>
                           <span class="textoContenido"> Renovar / Adicionar </span></td>
                       </tr>
                         <tr>
-                          <td height="30" valign="top">
+                          <td height="30" valign="top" style="display:none">
                           
                           <div class="div1" style="display:display;">
                             <form id="frmrenovar" name="frmrenovar" method="post">
@@ -500,6 +511,23 @@ function PendientedePago(){
                                     </tr>
                                   </table></td>
                                 </tr>
+                                
+                                 <tr>
+                                  <td width="456" height="30" class="textoContenido"><table width="100%" border="0" cellspacing="1" cellpadding="1">
+                                    <tr>
+                                      <td width="134" height="30" class="textoContenido">Renovar Por 12 Hora</td>
+                                      <td width="71" height="30" class="textoContenido">S/ 
+                                       </td>
+                                      <td width="244" class="textoContenido">
+                                      	 <input name="txtprecioporhora12" type="text" class="textbox" required="required" id="txtprecioporhora12"  style="width:26%;" value="">
+                                        <button type="button" class="btnnegro" style="border:0px; cursor:pointer;" onClick="document.frmrenovar.action='include/alquiler/prg_alquiler-agregar.php?idhabitacion=<?php echo $xidhabitacion.'&idalquiler='.$xidalquiler.'&idtipo=6';?>'; document.frmrenovar.submit(); "> <i class="fa fa-save"></i>  </button>
+                                        </td>
+                                    </tr>
+                                  </table></td>
+                                </tr>
+
+
+
                                 <tr>
                                   <td height="30" class="textoContenido"><div class="lineahorizontal" style="background:#00A230;"></div></td>
                                 </tr>
@@ -512,7 +540,7 @@ function PendientedePago(){
                           </td>
                           <td height="30" colspan="2" valign="top">
                           
-                          <div class="div2"  style="display:display;">
+                          <div class="div2"  style="display:none;">
                             <form id="frmagregar" name="frmagregar" method="post">
                               <table width="98%" border="0" cellspacing="1" cellpadding="1">
                                 <tr>
@@ -547,6 +575,20 @@ function PendientedePago(){
                                     </tr>
                                   </table></td>
                                 </tr>
+
+                                <tr>
+                                  <td height="30" class="textoContenido"><table width="100%" border="0" cellspacing="1" cellpadding="1">
+                                    <tr>
+                                      <td width="134" height="30" class="textoContenido">Renovar 1 D&iacute;a </td>
+                                      <td width="73" class="textoContenido">S/ 
+                                        </td>
+                                      <td width="240" class="textoContenido"> <input name="txtpreciodia12" type="text" id="txtpreciodia12" class="textbox" style="width:25%;"value="<?php /*echo ($preciodiario / 2);*/?>">
+                                       <button type="button" class="btnnegro" style="border:0px; cursor:pointer;" onClick="document.frmagregar.action='include/alquiler/prg_alquiler-agregar.php?idhabitacion=<?php echo $xidhabitacion.'&idalquiler='.$xidalquiler.'&idtipo=7';?>'; document.frmagregar.submit(); "> <i class="fa fa-save"></i></button></td>
+                                    </tr>
+                                  </table></td>
+                                </tr>
+                                
+
                                 <tr>
                                   <td height="30" class="textoContenido"><div class="lineahorizontal" style="background:#FFAF03;"> </div></td>
                                 </tr>
@@ -611,9 +653,10 @@ function PendientedePago(){
                             <tbody>
                               <tr class="textoContenido">
                                 <td width="21%" height="24"><strong>Resumen del Cliente</strong></td>
-                                <td width="17%" height="24">Habitación: S/ <strong><?php echo number_format($xprecioalquiler,2);?></strong></td>
+                                <td width="17%" height="24">Habitación: S/ <strong><?php echo number_format($xprecioalquiler - $xaFila[11],2);?></strong></td>
                                 <td width="18%" height="24">Consumo: S/ <?php echo number_format($xprodtotal,2);?></td>
-                                <td width="21%" height="24"><strong>Importe Total: S/ <?php echo number_format(($xprecioalquiler + $xprodtotal),2) ?></strong></td>
+                                <td width="21%" height="24"><strong>Descuento: S/ <?php echo number_format(($xaFila[11]),2) ?></strong></td>
+                                <td width="21%" height="24"><strong>Importe Total: S/ <?php echo number_format(($xprecioalquiler + $xprodtotal) - $xaFila[11],2) ?></strong></td>
                                 <td width="23%" height="24"> 
                                 <form name="frmdeuda" id="frmdeuda">
                                 <span style="color:#E1583E; font-weight:600;"> Pendiente de Pago: S/ <?php echo number_format($precioalquilerpendiente,2); ?> </span> <input name="txtpendientepago" type="hidden" id="txtpendientepago" value="<?php echo $precioalquilerpendiente;?>">
@@ -654,11 +697,11 @@ function PendientedePago(){
                                 </td>
                                 <td width="620" height="30" align="right" valign="middle">
                                 
-                                <a href="alquilar-cambiarhabitacion.php?idalquiler=<?php echo $xidalquiler.'&idhabitacion='.$xidhabitacion.'&idtipohabitacion='.$xidtipohabitacion; ?>" class="btnnegro"> <i class="fa fa-refresh"></i> Cambiar de Habitación </a> 
+                                <a href="alquilar-cambiarhabitacion.php?idalquiler=<?php echo $xidalquiler.'&idhabitacion='.$xidhabitacion.'&idtipohabitacion='.$xidtipohabitacion; ?>" class="btnnegro"> <i class="fa fa-refresh"></i> Cambiar de Mesa </a> 
                                 <a  href="alquilar-anulacion.php?idalquiler=<?php echo $xaFila['0'].'&idhabitacion='.$xaFila['2']; ?>" class='confirm btnnegro' onClick="return confirm('&iquest;Confirma la Anulación de la Orden de la Habitación?');"> <i class="fa fa-close"></i> Anular </a>
                                
                                
-                                <a  href="include/alquiler/prg_alquiler-finalizar.php?idalquiler=<?php echo $xaFila['0'].'&idhabitacion='.$xaFila['2']; ?>" class='confirm btnrojo' onClick="return PendientedePago(); return confirm('&iquest;Confirma finalizar el Alquiler de la  Habitación?');"> <i class="fa fa-close"></i> Finalizar Habitación </a>
+                                <a  href="include/alquiler/prg_alquiler-finalizar.php?idalquiler=<?php echo $xaFila['0'].'&idhabitacion='.$xaFila['2']; ?>" class='confirm btnrojo' onClick="return PendientedePago(); return confirm('&iquest;Confirma finalizar el Alquiler de la  Habitación?');"> <i class="fa fa-close"></i> Finalizar Mesa </a>
                                 
                                 </td>
                               </tr>
@@ -716,7 +759,7 @@ function PendientedePago(){
 
 			  if (willDelete) {
 			  	//Enviar proceso por ajax
-			  	 $.ajax({
+			  	$.ajax({
 		            url:'FE/Generaxml.php',
 		            type:'post',
 		            data:{'idalquiler':<?php echo $xidalquiler; ?>,'tipo_documento':$("#series").val()},

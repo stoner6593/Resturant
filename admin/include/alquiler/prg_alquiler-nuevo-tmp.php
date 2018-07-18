@@ -32,6 +32,7 @@ $_SESSION['xidcliente'] = $_POST['txtidcliente'];
 $_SESSION['xcliente'] = $_POST['txtcliente'];
 
 //1. ALQUILER POR HORAS *********************************************************************************
+//Modificado para el restaurante, se agrega detalle con precio 0 para procesos de venta
 if($xtxttipoalquiler == 1){
 	$xcostohoras = $_POST['txtcostohoras'];
 	$xnrohoras = 6;
@@ -64,10 +65,10 @@ if($xtxttipoalquiler == 1){
 		'$xfechadesde',
 		'$xfechahasta',
 		'$xnrohoras',
-		'$xcostohoras',
-		'$xcostohoras',
+		'0',
+		'0',
 		'$xnrohoras',
-		'$xtotal'
+		'0'
 		
 		)";
 		if($mysqli->query($consulta)){
@@ -86,9 +87,9 @@ if($xtxttipoalquiler == 2){
 	$txtfechahasta = $_POST['txtfechahasta'];
 	$txtnrodias = $_POST['txtnrodias'];
 	
-	$xfechadesde = Cfecha($txtfechadesde).' '.'12:00:00'; //fecha de Hoy
+	$xfechadesde = Cfecha($txtfechadesde).' '.date('H:i:s'); //fecha de Hoy
 	
-	$xfechahasta = Cfecha($_POST['txtfechahasta']).' '.'12:00:00'; //Fecha hasta 
+	$xfechahasta = Cfecha($_POST['txtfechahasta']).' '.date('H:i:s'); //Fecha hasta 
 	//$xtotal = $txtcostodiario * $txtnrodias;
 	
 	//Obtener Precios
@@ -133,11 +134,12 @@ if($xtxttipoalquiler == 2){
 			if($i == 1){
 				if($hora > $horamedia){
 					//echo "Tarifa 2 - Viernes";
-					$xpreciodiario = $haFila['6'];
+					//echo $hora."-".$horamedia;
+					$xpreciodiario = $haFila['4'];
 				 	$xtotal = $xtotal + $xpreciodiario;
 				}else{
 					//echo "Tarifa 1 :: Domingo - Jueves ";
-					$xpreciodiario = $haFila['4'];
+					$xpreciodiario = $haFila['6'];
 					$xtotal = $xtotal + $xpreciodiario;
 				}
 			}else{
@@ -159,10 +161,12 @@ if($xtxttipoalquiler == 2){
 			if($i == 1){
 				if($hora > $horamedia){
 					//echo "Tarifa 1 :: Domingo - Jueves ";
+					
 					$xpreciodiario = $haFila['6'];
 					$xtotal = $xtotal + $xpreciodiario;
 				}else{
 					//echo "Tarifa 2 - Viernes";
+					echo $hora."-".$horamedia;
 					$xpreciodiario = $haFila['4'];
 					$xtotal = $xtotal + $xpreciodiario;
 				}
@@ -174,8 +178,16 @@ if($xtxttipoalquiler == 2){
 			break;
 		case 6:
 			//echo "Tarifa 2 - Viernes";
-			$xpreciodiario = $haFila['6'];
-			$xtotal = $xtotal + $xpreciodiario;
+			
+			if($hora > $horamedia){
+					//echo "Tarifa 1 :: Domingo - Jueves ";
+					$xpreciodiario = $haFila['6'];
+					$xtotal = $xtotal + $xpreciodiario;
+				}else{
+					//echo "Tarifa 2 - Viernes";
+					$xpreciodiario = $haFila['6'];
+					$xtotal = $xtotal + $xpreciodiario;
+				}
 			break;
 		}
 		/*
@@ -414,16 +426,16 @@ if($xtxttipoalquiler == 6){
 			if($i == 1){
 				if($hora > $horamedia){
 					//echo "Tarifa 2 - Viernes";
-					$xpreciodiario = $haFila['6'];
+					echo $xpreciodiario = $haFila['4'];
 				 	$xtotal = $xtotal + $xpreciodiario;
 				}else{
 					//echo "Tarifa 1 :: Domingo - Jueves ";
-					$xpreciodiario = $haFila['4'];
+					$xpreciodiario = $haFila['6'];
 					$xtotal = $xtotal + $xpreciodiario;
 				}
 			}else{
 				//echo "Tarifa 2 - Viernes";
-				$xpreciodiario = $haFila['6'];
+				$xpreciodiario = $haFila['4'];
 				$xtotal = $xtotal + $xpreciodiario;
 			}
 			break;
@@ -432,7 +444,12 @@ if($xtxttipoalquiler == 6){
 		case 3:
 		case 4:
 			//echo "Tarifa 1 :: Domingo - Jueves ";
-			$xpreciodiario = $haFila['4'];
+			if($hora > $horamedia){
+				$xpreciodiario = $haFila['4'];
+			}else{
+				$xpreciodiario = $haFila['4'];
+			}	
+			
 			$xtotal = $xtotal + $xpreciodiario;
 			break;
 		case 5:
@@ -449,25 +466,25 @@ if($xtxttipoalquiler == 6){
 				}
 			}else{
 				//echo "Tarifa 2 - Viernes";
-				$xpreciodiario = $haFila['6'];
+				$xpreciodiario = $haFila['4'];
 				$xtotal = $xtotal + $xpreciodiario;
 			}
 			break;
 		case 6:
 			if($i == 1){
-				echo $hora ."-". $horamedia;
+				//echo $hora ."-". $horamedia;
 				if($hora > $horamedia){
 					//echo "Tarifa 2 - Viernes";
 					$xpreciodiario = $haFila['6'];
 				 	$xtotal = $xtotal + $xpreciodiario;
 				}else{
 					//echo "Tarifa 1 :: Domingo - Jueves ";
-					$xpreciodiario = $haFila['4'];
+					$xpreciodiario = $haFila['6'];
 					$xtotal = $xtotal + $xpreciodiario;
 				}
 			}else{
 				//echo "Tarifa 2 - Viernes";
-				$xpreciodiario = $haFila['6'];
+				$xpreciodiario = $haFila['4'];
 				$xtotal = $xtotal + $xpreciodiario;
 			}
 			break;

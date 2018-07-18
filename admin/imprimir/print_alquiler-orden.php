@@ -20,7 +20,8 @@ $sqlalquiler = $mysqli->query("select
 	alquilerhabitacion.comentarios,
 	alquilerhabitacion.nroorden,
 	alquilerhabitacion.totalefectivo,
-	alquilerhabitacion.totalvisa
+	alquilerhabitacion.totalvisa,
+	alquilerhabitacion.descuento
 	
 	from alquilerhabitacion inner join huesped on huesped.idhuesped = alquilerhabitacion.idhuesped
 	where alquilerhabitacion.idalquiler = '$xidalquiler' 
@@ -60,8 +61,9 @@ $sqldetalle = $mysqli->query("select
 	idturno,	
 	idusuario
 	
+	
 	from alquilerhabitacion_detalle 
-	where idalquiler = '$xidalquiler' order by idalquilerdetalle asc
+	where idalquiler = '$xidalquiler' and estadopago in(0,1) order by idalquilerdetalle asc
 	");
 
 //Consumos *****
@@ -190,7 +192,13 @@ $sqlventa = $mysqli->query("select
       <td height="20"><span class="textoContenido">------------------------------------------------</span></td>
     </tr>
     <tr>
-      <td height="20"><span class="textoContenido"><strong> Total Pagado: S/ <?php echo number_format(($xprecioalquiler+$xprodtotal),2);?></strong></span></td>
+      <td height="20"><span class="textoContenido"><strong> Descuento: S/ <?php echo number_format(($xaFila[12]),2);?></strong></span></td>
+    </tr>
+    <tr>
+      <td height="20"><span class="textoContenido">------------------------------------------------</span></td>
+    </tr>
+    <tr>
+      <td height="20"><span class="textoContenido"><strong> Total Pagado: S/ <?php echo number_format(($xprecioalquiler+$xprodtotal)- $xaFila[12],2);?></strong></span></td>
     </tr>
     <tr>
       <td height="20"><span class="textoContenido"> Total Pendiente: S/ <?php echo number_format($precioalquilerpendiente,2);?></span></td>

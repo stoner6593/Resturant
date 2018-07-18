@@ -88,11 +88,11 @@ if($txtbuscarpor == 1 && $txtdato != ""){
       <td width="793" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
        
           <tr>
-            <td width="330" height="30"> <h3 style="color:#E1583E;"> <i class="fa fa-hotel"></i> Habitaciones </h3></td>
+            <td width="330" height="30"> <h3 style="color:#E1583E;"> <i class="fa fa-hotel"></i> Mesas </h3></td>
             <td width="463" align="center"> 
 
-            <button onclick="window.location.href = 'habitaciones-editor.php';" class="btngris" style="border:0px; cursor:pointer;"> <i class="fa fa-plus-circle"></i> Nueva Habitación</button>
-            <button onclick="window.location.href = 'habitaciones-tipo.php';" class="btngris" style="border:0px; cursor:pointer;"> <i class="fa fa-plus-circle"></i> Tipo de Habitación y Tarifas</button>
+            <button onclick="window.location.href = 'habitaciones-editor.php';" class="btngris" style="border:0px; cursor:pointer;"> <i class="fa fa-plus-circle"></i> Nueva Mesa</button>
+            <button onclick="window.location.href = 'habitaciones-tipo.php';" class="btngris" style="border:0px; cursor:pointer; display: none;"> <i class="fa fa-plus-circle"></i> Tipo de Habitación y Tarifas</button>
             </td>
           </tr>
           <tr>

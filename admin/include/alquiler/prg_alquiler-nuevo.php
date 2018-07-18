@@ -35,8 +35,14 @@
 	$xtotal = $_POST['txtcostototal'];
 	$xtotalhabitacion = $_POST['txtcostototalhabitacion']; //
 	$xtotalproducto = $_POST['txtcostototalproducto']; //
-	
-	
+
+	$descuento = $_POST['descuentoglobal']; //
+	if($descuento =="" || $descuento==0){
+		$descuento=0;
+	}else{
+		$descuento=$descuento;
+	}
+
 	
 	if($xformapago == 1){
 		$montoefectivo = $xtotal;
@@ -64,7 +70,8 @@
 		total,
 		idturno,
 		idusuario,
-		nroorden
+		nroorden,
+		descuento
 		
 		) values (
 		
@@ -78,7 +85,8 @@
 		'$xtotal',
 		'$xidturno',
 		'$idusuario',
-		'$txtnumero'
+		'$txtnumero',
+		'$descuento'
 		
 		)";
 		
@@ -125,7 +133,7 @@
 				$formapago = $aFila['8'];
 				$totalefectivo = $aFila['9'];
 				$totalvisa = $aFila['10'];
-				$estadopago = 1;
+				$estadopago = 0; //0 no pagado - 1 pagado
 				$costoingresoanticipado = $aFila['12'];
 				$horaadicional = $aFila['13'];
 				$costohoraadicional = $aFila['14'];
@@ -335,10 +343,11 @@
 	}
 	
 	$consultaturno = "update ingresosturno set
-		totalhabitacion = totalhabitacion + $xtotalhabitacion,
+		totalhabitacion = (totalhabitacion + $xtotalhabitacion) ,
 		totalproducto =  totalproducto + $xtotalproducto,
-		totalefectivo = totalefectivo + $montoefectivo,
-		totalvisa = totalvisa + $montovisa
+		totalefectivo = (totalefectivo + $montoefectivo) ,
+		totalvisa = totalvisa + $montovisa,
+		totaldescuento = totaldescuento + $descuento
 		where idturno = '$xidturno'";
 		if($mysqli->query($consultaturno)){}
 		

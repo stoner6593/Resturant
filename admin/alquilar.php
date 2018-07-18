@@ -74,14 +74,14 @@ $sqlhabitacionprecio = $mysqli->query("select
 			$xpreciohora = $haFila['5'];
 			$xpreciohoraadicional = $haFila['10'];
 			$xpreciohuespedadicional = $haFila['11'];
-			$xpreciohora12=$haFila['18'];
+			echo $xpreciohora12=$haFila['17'];
 		}else{
 			//echo "Tarifa 2 - Domingo";
 			 $xpreciodiario = $haFila['6']; //$haFila['6']
 			 $xpreciohora = $haFila['7'];
 			 $xpreciohoraadicional = $haFila['10'];
 			 $xpreciohuespedadicional = $haFila['11'];
-			 $xpreciohora12=$haFila['17'];
+			 $xpreciohora12=$haFila['18'];
 		};
 		//Adicional 12H
 		
@@ -95,7 +95,11 @@ $sqlhabitacionprecio = $mysqli->query("select
 		$xpreciohora = $haFila['5'];
 		$xpreciohoraadicional = $haFila['10'];
 		$xpreciohuespedadicional = $haFila['11'];
-		$xpreciohora12=$haFila['17'];
+		if($hora > $horamedia){
+			$xpreciohora12=$haFila['17'];
+		}else{
+			$xpreciohora12=$haFila['17'];
+		}	
 		break;
 	case 5:
 		if($hora > $horamedia){
@@ -104,7 +108,7 @@ $sqlhabitacionprecio = $mysqli->query("select
 			$xpreciohora = $haFila['7'];
 			$xpreciohoraadicional = $haFila['10'];
 			$xpreciohuespedadicional = $haFila['11'];
-			$xpreciohora12=$haFila['17'];
+			$xpreciohora12=$haFila['18'];
 		}else{
 			//echo "Tarifa 1 - Viernes";
 			$xpreciodiario = $haFila['4'];
@@ -120,7 +124,7 @@ $sqlhabitacionprecio = $mysqli->query("select
 		$xpreciohora = $haFila['7'];
 		$xpreciohoraadicional = $haFila['10'];
 		$xpreciohuespedadicional = $haFila['11'];
-		
+		//echo $hora."-".$horamedia;
 		//Agregado para 12 horas V-S
 		if($hora > $horamedia){
 			//echo "Tarifa 2 - Viernes";
@@ -128,18 +132,20 @@ $sqlhabitacionprecio = $mysqli->query("select
 			$xpreciohora = $haFila['7'];
 			$xpreciohoraadicional = $haFila['10'];
 			$xpreciohuespedadicional = $haFila['11'];
-			$xpreciohora12=$haFila['17'];
+			$xpreciohora12=$haFila['18'];
 		}else{
 			//echo "Tarifa 1 - Viernes";
-			$xpreciodiario = $haFila['4'];
-			$xpreciohora = $haFila['5'];
+			
+			$xpreciodiario = $haFila['6'];
+			$xpreciohora = $haFila['7'];
 			$xpreciohoraadicional = $haFila['10'];
 			$xpreciohuespedadicional = $haFila['11'];
-			$xpreciohora12=$haFila['17'];
+			$xpreciohora12=$haFila['18'];
 		};
 		
 		break;
 	}
+	//echo $dia;
 	//Uso de Switch Case
 	
 	/*
@@ -208,7 +214,43 @@ $sqlalquilertmp = $mysqli->query("select
 	from alquilerhabitacion_detalle_tmp
 	order by idtmp asc");
 
-//print_r($sqlalquilertmp->fetch_row());
+
+/**
+ * Ver la forma de mejorar esta rutina
+ */
+$TblMax = $mysqli->query("select max(idtmp) from alquilerhabitacion_detalle_tmp");
+$Contador = $TblMax->fetch_row();
+$xidprimario = $Contador['0'] + 1 ;
+
+$xnrohoras = 6;
+$xfechadesde = date('Y-m-d H:i:s'); //fecha de Hoy
+$xfechahasta = sumarhoraafecha(6,$xfechadesde); //Fecha hasta adicionando 6 horas
+$xtotal = $xcostohoras;
+
+$consulta=$mysqli->query("insert alquilerhabitacion_detalle_tmp(
+		idtmp,
+		tipoalquiler,
+		fechadesde,
+		fechahasta,
+		nrohoras,
+		costohora,
+		preciounitario,
+		cantidad,
+		total
+		
+		)values(
+		
+		'$xidprimario',
+		'1',
+		'$xfechadesde',
+		'$xfechahasta',
+		'$xnrohoras',
+		'0',
+		'0',
+		'$xnrohoras',
+		'0'
+		
+		)");
 ?>
 <!doctype html>
 <html>
@@ -249,10 +291,10 @@ $sqlalquilertmp = $mysqli->query("select
 <script type="text/javascript" language="javascript">
 	$(document).ready(function(){
 		$("#mostrar").click(function(){
-			$('.div1').show("swing");
+			//$('.div1').show("swing");
 		});
 		$("#ocultar").click(function(){
-			$('.div1').hide("linear");
+			//$('.div1').hide("linear");
 		});
 	});
 </script>
@@ -288,7 +330,7 @@ $sqlalquilertmp = $mysqli->query("select
 	
 	function validarDatos() { 
 		if (espacioVacio(document.form1.txtcliente.value) == false ) {  
-		alert("Seleccione un Huésped (Cliente)"); 
+		alert("Seleccione un Cliente (Cliente)"); 
 		document.form1.txtcliente.focus();
 		return false  
 		}
@@ -357,7 +399,7 @@ $sqlalquilertmp = $mysqli->query("select
       <td width="1125" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
        
           <tr>
-            <td width="280" height="30"> <h3 style="color:#E1583E;"> <i class="fa fa-users"></i> Alquilar Habitación</h3></td>
+            <td width="280" height="30"> <h3 style="color:#E1583E;"> <i class="fa fa-users"></i> Mesa</h3></td>
             <td width="526" align="right">
             
 			<?php if($xestadohabitacion == 1){?>
@@ -382,12 +424,12 @@ $sqlalquilertmp = $mysqli->query("select
                           <td width="894" height="30"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tbody>
                               <tr>
-                                <td width="6%" height="40"><span class="textoContenido">Cli0ente</span></td>
+                                <td width="6%" height="40"><span class="textoContenido">Cliente</span></td>
                                 <td width="53%" height="40">
                                 <input name="txtcliente" type="text" class="textbox" id="txtcliente" style="width:75%;" value="<?php echo $_SESSION['xcliente'];?>" readonly>
                                   
-                                  <button type="button" onclick="abrirCliente(); return false" class="btnmodificar tooltip" tooltip="Seleccionar Huésped" style="border:0px; cursor:pointer;"> <i class="fa fa-search-plus"></i></button>
-							       <button type="button" onclick="window.location.href='huespedes-editor.php?xdesdealquiler=1&<?php echo 'idhabitacion='.$xidhabitacion.'&nrohabitacion='.$xnrohabitacion.'&xestado='.$xestadohabitacion.'&idtipohab='.$idtipohab;?>';" class="btnmodificar tooltip" tooltip="Agregar Huésped" style="border:0px; cursor:pointer;"> <i class="fa fa-plus-square"></i></button>                                  
+                                  <button type="button" onclick="abrirCliente(); return false" class="btnmodificar tooltip" tooltip="Seleccionar Cliente" style="border:0px; cursor:pointer;"> <i class="fa fa-search-plus"></i></button>
+							       <button type="button" onclick="window.location.href='huespedes-editor.php?xdesdealquiler=1&<?php echo 'idhabitacion='.$xidhabitacion.'&nrohabitacion='.$xnrohabitacion.'&xestado='.$xestadohabitacion.'&idtipohab='.$idtipohab;?>';" class="btnmodificar tooltip" tooltip="Agregar Cliente" style="border:0px; cursor:pointer;"> <i class="fa fa-plus-square"></i></button>                                  
                                   <input name="txtidcliente" type="hidden" id="txtidcliente" value="<?php echo $_SESSION['xidcliente'];?>"></td>
                                 <td width="26%" height="40" align="center"><span class="textoContenido"><strong><?php echo $tFila['1'];?> N° </strong></span><span class="textoContenido" style="font-size:28px;color:#00A230;"> <?php echo $xnrohabitacion;?></span>
                                   <input name="txtidhabitacion" type="hidden" id="txtidhabitacion" value="<?php echo $xidhabitacion;?>">
@@ -458,7 +500,7 @@ $sqlalquilertmp = $mysqli->query("select
                                   <tr>
                                     <td height="30" bgcolor="#FFFFFF" class="textoContenido"><table width="100%" border="0" cellpadding="1" cellspacing="1">
                                       <tr>
-                                        <td width="200" height="30" bgcolor="#FFFFFF" ><span class="textoContenido" style="color:#00A230;"><strong> <i class="fa fa-clock-o  fa-lg"></i>  Huésped Adicional</strong></span></td>
+                                        <td width="200" height="30" bgcolor="#FFFFFF" ><span class="textoContenido" style="color:#00A230;"><strong> <i class="fa fa-clock-o  fa-lg"></i>  Cliente Adicional</strong></span></td>
                                         <td width="363" height="30"><h3 class="textoContenido" style="margin:0px; padding:0px;">Costo Ocupante Adicional (S/ <?php echo $xpreciohuespedadicional;?>+)
                                           <input name="txtprecioadicionalhora" type="hidden" id="txtprecioadicionalhora" value="<?php echo $xpreciohuespedadicional;?>">
                                         </h3></td>
@@ -563,7 +605,7 @@ $sqlalquilertmp = $mysqli->query("select
                             </div></td>
                         </tr>
                         <tr>
-                          <td height="30"><table width="100%" border="0" cellspacing="1" cellpadding="1">
+                          <td height="30"><table width="100%" border="0" cellspacing="1" cellpadding="1" style="display: none;">
                           
                               <tr class="textoContenido">
                                 <td width="6%" height="25" align="center">#</td>
@@ -663,8 +705,8 @@ $sqlalquilertmp = $mysqli->query("select
 							} 
 						?>
                           </table>
-                          <input name="txtnumeroproducto" type="hidden" id="txtnumeroproducto" value="<?php echo $num;?>">
-                          <input name="txtcostototalproducto" type="hidden" id="txtcostototalproducto" value="<?php echo $xprodtotal;?>"></td>
+                          <input name="txtnumeroproducto" type="text" id="txtnumeroproducto" value="<?php echo $num;?>">
+                          <input name="txtcostototalproducto" type="text" id="txtcostototalproducto" value="<?php echo $xprodtotal;?>"></td>
                         </tr>
                         <tr>
                           <td height="72"><table width="100%" border="0" cellspacing="1" cellpadding="1">
@@ -687,6 +729,12 @@ $sqlalquilertmp = $mysqli->query("select
                                     <input type="radio" name="txtformadepago" id="radio4" value="3" onClick="mostrando();calcularpagocompartido();">
                                     Ambas Formas </label>
                                 </span></td>
+  								<!--Descuento Global-->
+  								<td width="106" height="62"><span class="textoContenido" title="Agregar Descuento Global">Descuento Global</span></td>
+
+  								<td width="208" height="62"><input name="descuentoglobal" type="text" class="textbox" id="descuentoglobal" style="text-align:right; font-size:18px; background:#E4F8F9;" value="0" ></td>
+
+  								<!-- Fin Descuento global-->
                                 <td width="131"><input name="txttotalproducto" type="hidden" id="txttotalproducto" value="<?php echo $xprodtotal;?>"></td>
                                 <td width="106" height="62"><span class="textoContenido">Total a Cobrar 
                                   <input name="txttotaltmp" type="hidden" id="txttotaltmp" value="<?php echo number_format(($xprecioalquiler+$xprodtotal),2);?>">
@@ -697,7 +745,7 @@ $sqlalquilertmp = $mysqli->query("select
                           </table></td>
                         </tr>
                         <tr>
-                          <td><textarea name="txtcomentarios" class="textbox" id="txtcomentarios" style="width:97%; line-height:30px;" placeholder="Si el alquiler es una Cortesía indicar los comentarios de quién autoriza."></textarea></td>
+                          <td><textarea name="txtcomentarios" class="textbox" id="txtcomentarios" style="width:97%; line-height:30px;" placeholder="Comentario adicional."></textarea></td>
                         </tr>
                         <tr>
                           <td><div class="lineahorizontal" style="background:#EFEFEF;"></div></td>
@@ -755,6 +803,32 @@ $_SESSION['xcliente'] = "";
 <script type="text/javascript">
 	$(function(){
 		/*Fechas*/
+		var descuento=0,t1=0,t2=0,Tot=0;
+		Tot=$("#txtcostototal").val();
+		$("#descuentoglobal").on("keyup",function(e){
+			e.preventDefault();
+			/*if($.isNumeric($('#descuentoglobal').val())){
+				if($("#descuentoglobal").val() >0){
+					descuento=parseFloat($('#descuentoglobal').val());					
+					t2=parseFloat($("#txtcostototal").val() - descuento);
+					
+					$("#txtcostototal").val(t2);
+				}else{
+					$("#txtcostototal").val(Tot);
+					$("#txttotaltmp").val(Tot);
+				}
+			}*/
+		})
+
+		$("#descuentoglobal").on("blur",function(e){
+			e.preventDefault();
+			/*if($("#descuentoglobal").val() >0){
+				$("#txttotaltmp").val(t2);
+			}else{
+				$("#txtcostototal").val(Tot);
+				$("#txttotaltmp").val(Tot);
+			}*/
+		})
 
 		$("#datepickerdos").on('change',function(e){
 			e.preventDefault();

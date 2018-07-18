@@ -67,7 +67,7 @@ body {
 <body OnLoad="form1.txtdato.focus()">
 <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td height="26" valign="middle" bgcolor="#FFFFFF" class="textoContenido"><strong>Buscar Huésped / Cliente</strong></td>
+    <td height="26" valign="middle" bgcolor="#FFFFFF" class="textoContenido"><strong>Buscar Cliente </strong></td>
   </tr>
   <tr>
     <td height="25" valign="middle" bgcolor="#FFFFFF"><form name="form1" method="post" action="buscar-cliente.php">
@@ -92,7 +92,7 @@ body {
 	<table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#F0F0F0">
         <tr class="textoContenidoMenor">
           <td width="3%" height="25" bgcolor="#F4F4F4" ><div align="center"><strong>#</strong></div></td>
-          <td width="42%" height="25" align="left" valign="middle" bgcolor="#F4F4F4" ><div align="left">Huésped / Cliente</div></td>
+          <td width="42%" height="25" align="left" valign="middle" bgcolor="#F4F4F4" ><div align="left">Cliente </div></td>
           <td width="16%" align="left" valign="middle" bgcolor="#F4F4F4" ><div align="left">DNI </div></td>
           <td width="25%" align="left" valign="middle" bgcolor="#F4F4F4" ><div align="left">Descripción</div></td>
           <td width="9%" height="25" align="left" valign="middle" bgcolor="#F4F4F4" ><div align="center">No Grato </div></td>

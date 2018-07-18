@@ -58,9 +58,9 @@
     <?php if($_SESSION['estadomenu'] != 0){?>    
     <li><a  href="control-habitaciones.php"><i class="fa fa-cog"></i> &nbsp;&nbsp;&nbsp; Control </a></li>
     <li><a  href="venta.php"><i class="fa fa-shopping-basket"></i> &nbsp;&nbsp;&nbsp;  Venta Productos</a></li>
-    <li><a href="huespedes.php"><i class="fa fa-users"></i>  &nbsp;&nbsp;&nbsp; Huéspedes </a></li>
+    <li><a href="huespedes.php"><i class="fa fa-users"></i>  &nbsp;&nbsp;&nbsp; Clientes </a></li>
     
-    <li><a  href="habitaciones.php"><i class="fa fa-hotel"></i> &nbsp;&nbsp;&nbsp;   Habitaciones </a></li>
+    <li><a  href="habitaciones.php"><i class="fa fa-hotel"></i> &nbsp;&nbsp;&nbsp;   Mesas </a></li>
     
     <li><a  href="productos.php"><i class="fa fa-qrcode"></i> &nbsp;&nbsp;&nbsp;  Productos </a></li>
     <li><a  href="servicios.php"><i class="fa fa-qrcode"></i> &nbsp;&nbsp;&nbsp;  Servicios </a></li>
@@ -70,7 +70,7 @@
     <li><a  href="sunat.php"><i class="fa fa-user"></i>  &nbsp;&nbsp;&nbsp; Documentos SUNAT </a></li>
     <li><a  href="listadosunat.php"><i class="fa fa-user"></i>  &nbsp;&nbsp;&nbsp;Listado de documentos </a></li>
     <li><a  href="resumendiario.php"><i class="fa fa-user"></i>  &nbsp;&nbsp;&nbsp;Resumen diario </a></li>
-    <!--<li><a  href="listadoresumendiario.php"><i class="fa fa-user"></i>  &nbsp;&nbsp;&nbsp;Listado resumen diario </a></li>-->
+    <li><a  href="listadoresumendiario.php"><i class="fa fa-user"></i>  &nbsp;&nbsp;&nbsp;Listado resumen diario </a></li>
     <?php } ?>
     
     

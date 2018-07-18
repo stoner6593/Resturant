@@ -21,35 +21,16 @@ $newfecha2=$f2[2].'-'.$f2[1].'-'.$f2[0];
 
 
 if($finicio && $ffin){
-  $concatena=' and DATE(alquilerhabitacion.fecharegistro) between "'.$newfecha1.'" and "'.$newfecha2.'" ';
+  $concatena='  DATE(fecha) between "'.$newfecha1.'" and "'.$newfecha2.'" ';
+}else{
+  $concatena='  DATE(fecha) between "'.date('Y-m-d').'" and "'.date('Y-m-d').'" ';
 }
 
 
 
 
 
-$sqlalquiler = $mysqli->query("select
-      alquilerhabitacion.idalquiler,  
-      alquilerhabitacion.nrohabitacion,           
-      huesped.nombre,
-      huesped.ciudad,
-      huesped.tipo_documento,
-      huesped.documento,
-      
-      alquilerhabitacion.comentarios,
-      alquilerhabitacion.nroorden,
-      alquilerhabitacion.fecharegistro,
-
-      alquilerhabitacion.documento,
-      alquilerhabitacion.codigo_respuesta,
-      alquilerhabitacion.mensaje_respuesta,
-      alquilerhabitacion.nombrezip,
-      alquilerhabitacion.nombre_archivo,
-      alquilerhabitacion.total
-      
-      from alquilerhabitacion inner join huesped on huesped.idhuesped = alquilerhabitacion.idhuesped
-      where alquilerhabitacion.codigo_respuesta = 0 and alquilerhabitacion.iddocumento=1 and alquilerhabitacion.enviado=1 ".$concatena." order by  alquilerhabitacion.fecharegistro DESC
-      ");   
+$sqlalquiler = $mysqli->query("SELECT codigo_respuesta,mensaje_respuesta,fecha,nombre_archivo from resumen where ".$concatena." order by fecha DESC ");   
 
 
 
@@ -105,7 +86,7 @@ $sqlalquiler = $mysqli->query("select
               <tr>
                 <td width="1%">
 
-                  <form action="resumendiario.php" name="frmlistadocumentos" id="frmlistadocumentos" method="POST">
+                  <form action="listadoresumendiario.php" name="frmlistadocumentos" id="frmlistadocumentos" method="POST">
                     Fecha Inicio:<input name="finicio" value="<?php if ($finicio): echo $finicio; else: echo date("d/m/Y"); endif;?>" type="text" class="form-control" id="datepicker1" placeholder=" dd/mm/YYYY"  >  Fecha Inicio:<input name="ffin" type="text" value="<?php if ($ffin): echo $ffin; else:  echo date("d/m/Y"); endif;?>" class="form-control" id="datepicker2" placeholder=" dd/mm/YYYY" >
                    <button type="button" class="btn btn-primary mb1 bg-blue" onClick="document.frmlistadocumentos.submit();"  style="border:0px; cursor:pointer;"> <i class="fas fa-search" style="font-size: 14px;"></i></button> 
 
@@ -130,8 +111,8 @@ $sqlalquiler = $mysqli->query("select
                                 <th>Age</th>
                                 <th>Start date</th>
                                 <th>Salary</th>
-                                <th>Start date</th>
-                                <!--<th>Salary</th>-->
+                                <!--  <th>Start date</th>
+                                <th>Salary</th>-->
                                 
 
                             </tr>
@@ -147,13 +128,13 @@ $sqlalquiler = $mysqli->query("select
                           ?>
                             <tr>
                               <td><?php echo $item; ?></td>
+                              <td><?php echo $xhFila['0']; ?></td>
+                              <td><?php echo ($xhFila['1']); ?></td>
                               <td><?php echo $xhFila['2']; ?></td>
-                              <td><?php echo ($xhFila['9']); ?></td>
-                              <td><?php echo $xhFila['8']; ?></td>
-                              <td>S/. <?php echo $xhFila['14']; ?></td>
-                              <td><button type="button" class="btn btn-primary mb1 bg-blue tooltip" tooltip="PDF" data-id-pdf="<?php echo $xhFila['13'].'.pdf';?>" id="pdf" style="border:0px; cursor:pointer;"> <i class="fa fa-file-pdf" style="font-size: 14px;"></i></button></td>
-                              <td><button type="button" class="btn btn-primary mb1 bg-green tooltip" tooltip="XML" data-id-xml="<?php echo $nombreXml;?>" id="xml" style="border:0px; cursor:pointer;"> <i class="fas fa-file-code" style="font-size: 14px;"></i></button></td>
-                              <!--<td><button type="button" class="btn btn-primary mb1 bg-maroon tooltip" tooltip="CDR" data-id-cdr="<?php echo "R-".$xhFila['12'];?>" id="cdr" style="border:0px; cursor:pointer;"> <i class="fas fa-file-archive" style="font-size: 14px;"></i></button></td>-->
+                              <td><?php echo $xhFila['3']; ?></td>
+                              <td><button type="button" class="btn btn-primary mb1 bg-blue tooltip" tooltip="CDR" data-id-xml="R-<?php echo $xhFila['3'].'.xml';?>" id="xml" style="border:0px; cursor:pointer;"> <i class="fa fa-file-archive" style="font-size: 14px;"></i></button></td>
+                             <!-- <td><button type="button" class="btn btn-primary mb1 bg-green tooltip" tooltip="XML" data-id-xml="<?php echo $nombreXml;?>" id="xml" style="border:0px; cursor:pointer;"> <i class="fas fa-file-code" style="font-size: 14px;"></i></button></td>
+                              <td><button type="button" class="btn btn-primary mb1 bg-maroon tooltip" tooltip="CDR" data-id-cdr="<?php echo "R-".$xhFila['12'];?>" id="cdr" style="border:0px; cursor:pointer;"> <i class="fas fa-file-archive" style="font-size: 14px;"></i></button></td>-->
                              </tr>
                            <?php
                               }
@@ -312,47 +293,6 @@ $sqlalquiler = $mysqli->query("select
 
       $( "#datepicker1" ).datepicker();
       $( "#datepicker2" ).datepicker();
-      $('#example tbody ').on('click','#pdf',function(e){
-
-          e.preventDefault();
-          
-          var cod=$(this).attr('data-id-pdf'); 
-          swal("Buscando Archivo..! Por favor espere...", {
-            buttons: false,
-            closeOnEsc: false,
-            timer: 2000,
-            closeOnClickOutside: false
-          });
-          setTimeout(function(){
-            $.get("FE/PDF/"+cod)
-            .done(function() { 
-                swal({
-                 
-                  text: "Documento encontrado!",
-                  icon: "success",
-                  buttons: {
-                  cancel: false,
-                  confirm: true,
-                },
-                  dangerMode: true
-
-                })
-                .then((willDelete) => {
-                  if (willDelete) {
-                                         
-                      window.open("FE/PDF/"+cod);
-                  }
-                });
-
-                
-            }).fail(function(data) { 
-               swal("Error!","Documento no se encuentra en nuestro servidor..!", "error");      
-                console.log(data);
-                // not exists code
-            }) 
-          }, 2000);  
-          //swal("Error!",cod, "error");  
-      })
 
      
         $('#example tbody ').on('click','#xml',function(e){
@@ -367,7 +307,7 @@ $sqlalquiler = $mysqli->query("select
             closeOnClickOutside: false
           });
           setTimeout(function(){
-            $.get("FE/XMLFIRMADOS/"+cod)
+            $.get("FE/CDR/"+cod)
             .done(function() { 
                 swal({
                  
@@ -383,7 +323,7 @@ $sqlalquiler = $mysqli->query("select
                 .then((willDelete) => {
                   if (willDelete) {
                                          
-                      window.open("FE/XMLFIRMADOS/"+cod);
+                      window.open("FE/CDR/"+cod);
                   }
                 });
 
@@ -417,12 +357,12 @@ $sqlalquiler = $mysqli->query("select
         "aoColumns": [
           
           { "sTitle": "ID"},
-          { "sTitle": "Cliente" },
-          { "sTitle": "Documento"},
+          { "sTitle": "Ticket" },
+          { "sTitle": "Mensaje"},
           { "sTitle": "Fecha" },
-          { "sTitle": "Monto" },
-          { "sTitle": "PDF","sWidth": "70px" , "sClass": "center"},
-          { "sTitle": "XML","sWidth": "70px" , "sClass": "center"},
+          { "sTitle": "Archivo" },
+          { "sTitle": "CDR","sWidth": "70px" , "sClass": "center"},
+          //{ "sTitle": "XML","sWidth": "70px" , "sClass": "center"},
          //  { "sTitle": "CDR","sWidth": "70px" , "sClass": "center"},
          
           ],
@@ -501,7 +441,7 @@ $sqlalquiler = $mysqli->query("select
                                     icon: "success",
                                   });
                                  
-                                  window.location.href='resumendiario.php';
+                                  window.location.href='listadoresumendiario.php';
                               } 
                             });
                                                                                

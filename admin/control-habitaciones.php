@@ -43,7 +43,7 @@ $sqlhabitacion = $mysqli->query("select
 
 <?php include "head-include.php"; ?>
 <link rel="stylesheet" type="text/css" href="abc.css">
-
+<script src="https://masonry.desandro.com/masonry.pkgd.js"></script>
 </head>
 <body>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -57,7 +57,7 @@ $sqlhabitacion = $mysqli->query("select
       <td width="810" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
         <tbody>
           <tr>
-            <td height="30" colspan="6"><h3 style="color:#E1583E;"> <i class="fa fa-users"></i> Control de Habitaciones </h3> </td>
+            <td height="30" colspan="6"><h3 style="color:#E1583E;"> <i class="fa fa-users"></i> Control de Mesas </h3> </td>
             </tr>
           <tr>
             <td height="30" colspan="6"><div class="lineahorizontal" style="background:#BFBFBF;"></div></td>
@@ -65,7 +65,7 @@ $sqlhabitacion = $mysqli->query("select
           <tr>
             <td height="30" colspan="6" align="center" valign="middle">
             
-            <div class="grupo">
+            <div class="grupo" style="display:none">
             
             	<?php 
 				while($xhFila = $sqlhabitacion->fetch_row()){ 
@@ -98,7 +98,7 @@ $sqlhabitacion = $mysqli->query("select
                               <?php if($aFila['2']!=""){ echo $que; }else{ echo $xhFila['12']; } ?>
                               
                           </span> <br>
-                          <span class="textoContenidoMenor" style="color:#<?php echo $xhFila['13'] ?>; text-align:center; margin:0px;padding:0px;font-size:10px;"><?php echo $xhFila['10']; if($xhFila['16']==1){ echo "&nbsp; "."<i class='fa fa-th-large fa-lg'></i>";} ?></span></td>
+                          <span class="textoContenidoMenor" style="color:#<?php echo $xhFila['13'] ?>; text-align:center; margin:0px;padding:0px;font-size:10px;"><?php //echo $xhFila['10']; if($xhFila['16']==1){ echo "&nbsp; "."<i class='fa fa-th-large fa-lg'></i>";} ?></span></td>
                         </tr>
                         <tr>
                           <td height="25" colspan="2" align="center" valign="top" bgcolor="">
@@ -123,7 +123,7 @@ $sqlhabitacion = $mysqli->query("select
 							$finhora = date("H:i",$fecha);
 							
 							if($aFila['1']!=""){
-								echo 'Fin: '.$fechafin.' - '.$finhora; 
+								//echo 'Fin: '.$fechafin.' - '.$finhora; 
 							}
 							?>
                             
@@ -195,6 +195,28 @@ $sqlhabitacion = $mysqli->query("select
 </body>
 </html>
 
+<script type="text/javascript">
+  $("document").ready(function(){
+    setTimeout(function(){
+    
+      $(".grupo").css("display","block");
+      call_masonry();
+      
+    }, 500);
+    update_masonry();
+  })
+
+  function call_masonry(){
+    $( '.grupo' ).masonry({
+      itemSelector: '.caja',
+      isAnimated: true
+    }); 
+  }
+  function update_masonry(){
+    //$( '.grupo' ).masonry();
+   $('.grupo').masonry();
+  }
+</script>
 
 
 

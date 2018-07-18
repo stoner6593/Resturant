@@ -66,7 +66,7 @@ $xhFila = $sqlhabitacion->fetch_row();
       <td width="1125" valign="top"><table width="900" border="0" cellpadding="0" cellspacing="0">
        
           <tr>
-            <td width="729" height="30"> <h3 style="color:#E1583E;"> <i class="fa fa-hotel"></i> Habitaciones / Editor</h3></td>
+            <td width="729" height="30"> <h3 style="color:#E1583E;"> <i class="fa fa-hotel"></i> Mesas / Editor</h3></td>
             <td width="175" align="right"> <button type="button" onclick="window.location.href='habitaciones.php';" class="btngris" style="border:0px; cursor:pointer;"> <i class="fa fa-arrow-left"></i> Volver </button> </td>
           </tr>
           <tr>
@@ -92,8 +92,8 @@ $xhFila = $sqlhabitacion->fetch_row();
                           <td width="202" height="25" class="textoContenido">Piso
                           <input name="txtidprimario" type="hidden" id="txtidprimario" value="<?php echo $xhFila['0'];?>"></td>
                           <td width="225" height="25"><span class="textoContenido">Número</span></td>
-                          <td width="211" height="25"><span class="textoContenido">Tipo de Habitación</span></td>
-                          <td width="249" height="25"><span class="textoContenidoMenor">Nro Huéspedes </span></td>
+                          <td style="display:none;" width="211" height="25"><span class="textoContenido">Tipo de Habitación</span></td>
+                          <td style="display:none" width="249" height="25"><span class="textoContenidoMenor">Nro Huéspedes </span></td>
                         </tr>
                         <tr>
                           <td width="202" height="25">
@@ -110,7 +110,7 @@ $xhFila = $sqlhabitacion->fetch_row();
                             <option>10</option>
                           </select></td>
                           <td width="225" height="25"><input name="txtnumero" type="text" class="textbox" value="<?php echo $xhFila['4'];?>" <?php if($xestado=='modifica'){echo 'readonly';}?> ></td>
-                          <td width="211" height="25">
+                          <td width="211" height="25" style="display:none">
 							<?php
                             echo "<select name='txttipo' class='textbox' >";             
                             while ($xtFila = $sqlhabitaciontipo->fetch_row()){
@@ -124,15 +124,15 @@ $xhFila = $sqlhabitacion->fetch_row();
                             $sqlhabitaciontipo->free();
                             ?>
                           </span></td>
-                          <td width="249" height="25"><input name="txtnrohuespedes" type="text" class="textbox" id="txthuespedmaximo4" value="<?php echo $xhFila['9'];?>"></td>
+                          <td style="display:none" width="249" height="25"><input name="txtnrohuespedes" type="text" class="textbox" id="txthuespedmaximo4" value="<?php echo $xhFila['9'];?>"></td>
                         </tr>
-                        <tr>
+                        <tr style="display:none">
                           <td width="202" height="25"><span class="textoContenidoMenor">Huéspedes Adicionales</span></td>
                           <td width="225" height="25">&nbsp;</td>
                           <td width="211" height="25">&nbsp;</td>
                           <td width="249" height="25">&nbsp;</td>
                         </tr>
-                        <tr>
+                        <tr style="display:none">
                           <td height="25" valign="top"><input name="txtnroadicional" type="text" class="textbox" id="txtnroadicional" style="width:85%" value="<?php echo $xhFila['11'];?>"></td>
                           <td height="25" colspan="3" valign="top"><span class="textoContenido">Marcar si es con vista  Ventana a la calle </span>
                             <input name="txtubicacion" type="checkbox" <?php if($xhFila['12']==1){echo "checked";}?>  id="txtubicacion" value="1"></td>
@@ -143,13 +143,13 @@ $xhFila = $sqlhabitacion->fetch_row();
                           <td height="25">&nbsp;</td>
                           <td height="25">&nbsp;</td>
                         </tr>
-                        <tr>
+                        <tr style="display:none">
                           <td width="202" height="25"><span class="textoContenidoMenor">Precio Diario (Dom-Jue) </span></td>
                           <td width="225" height="25"><span class="textoContenidoMenor">Precio por Horas (Dom-Jue)</span></td>
                           <td width="211" height="25"><span class="textoContenidoMenor">Precio Diario (Vie-Sab)</span></td>
                           <td width="249" height="25"><span class="textoContenidoMenor">Precio por Horas (Vie-Sab)</span></td>
                         </tr>
-                        <tr>
+                        <tr style="display:none">
                           <td height="25" valign="top"><input name="txtpreciodiariodj" type="text" class="textbox" id="txtpreciodiariodj" style="width:85%; text-align:right;" onFocus = "txtpreciodiariodj.value = EliminarComa(this.value)" onBlur="document.form1.txtpreciodiariodj.value = formatCurrency(txtpreciodiariodj.value);" value="<?php echo number_format($xhFila['5'],2);?>"></td>
                           <td height="25" valign="top"><input name="txtpreciohorasdj" type="text" class="textbox" id="txtpreciohorasdj" style="width:85%; text-align:right;" onFocus = "txtpreciohorasdj.value = EliminarComa(this.value)" onBlur="document.form1.txtpreciohorasdj.value = formatCurrency(txtpreciohorasdj.value);" value="<?php echo number_format($xhFila['6'],2);?>"></td>
                           <td height="25" valign="top"><input name="txtpreciodiariovs" type="text" class="textbox" id="txtpreciodiariovs" style="width:85%; text-align:right;" onFocus = "txtpreciodiariovs.value = EliminarComa(this.value)" onBlur="document.form1.txtpreciodiariovs.value = formatCurrency(txtpreciodiariovs.value);" value="<?php echo number_format($xhFila['7'],2);?>"></td>
@@ -161,7 +161,7 @@ $xhFila = $sqlhabitacion->fetch_row();
                           <td height="25" valign="middle">&nbsp;</td>
                           <td height="25" valign="middle">&nbsp;</td>
                         </tr>
-                        <tr>
+                        <tr style="display:none">
                           <td width="202" height="25"><span class="textoContenidoMenor">Precio por Hora Adicional</span></td>
                           <td width="225" height="25"><span class="textoContenidoMenor">Precio por Persona Adicional</span></td>
                           <td width="225" height="25"><span class="textoContenidoMenor">Precio 12H (Dom-Jue)</span></td>
@@ -169,7 +169,7 @@ $xhFila = $sqlhabitacion->fetch_row();
                           <td height="25" valign="middle">&nbsp;</td>
                           <td height="25" valign="middle">&nbsp;</td>
                         </tr>
-                        <tr>
+                        <tr style="display:none">
                           <td height="25" valign="top"><input name="txtpreciohoraadicional" type="text" class="textbox" id="txtpreciohoraadicional" style="width:85%; text-align:right;" onFocus = "txtpreciohoraadicional.value = EliminarComa(this.value)" onBlur="document.form1.txtpreciohoraadicional.value = formatCurrency(txtpreciohoraadicional.value);" value="<?php echo number_format($xhFila['13'],2);?>"></td>
                           <td height="25" valign="top"><input name="txtpreciopersonaadicional" type="text" class="textbox" id="txtpreciopersonaadicional" style="width:85%; text-align:right;" onFocus = "txtpreciopersonaadicional.value = EliminarComa(this.value)" onBlur="document.form1.txtpreciopersonaadicional.value = formatCurrency(txtpreciopersonaadicional.value);" value="<?php echo number_format($xhFila['14'],2);?>"></td>
                           <td height="25" valign="top"><input name="txtprecio12" type="text" class="textbox" id="txtprecio12" style="width:85%; text-align:right;" onFocus = "txtprecio12.value = EliminarComa(this.value)" onBlur="document.form1.txtprecio12.value = formatCurrency(txtprecio12.value);" value="<?php echo number_format($xhFila['15'],2);?>"></td>
