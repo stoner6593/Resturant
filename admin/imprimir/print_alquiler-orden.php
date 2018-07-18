@@ -133,7 +133,7 @@ $sqlventa = $mysqli->query("select
       <td height="20"><span class="textoContenido">------------------------------------------------</span></td>
     </tr>
     <tr>
-      <td height="20"><strong><span class="textoContenido">Habitación: <span class="textoContenido"><?php echo $xaFila['3'];?></span></span></strong></td>
+      <td height="20"><strong><span class="textoContenido">Mesa: <span class="textoContenido"><?php echo $xaFila['3'];?></span></span></strong></td>
     </tr>
     <tr>
       <td height="20"><span class="textoContenido">Cliente: <?php echo $xaFila['7'];?></span></td>
